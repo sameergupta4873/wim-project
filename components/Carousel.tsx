@@ -11,10 +11,11 @@ export default function Carousel({ setActive, slides, setIsLoaded }: any) {
             <div className="flex items-center justify-center w-full h-full py-24 sm:py-4 px-1 pl-5 bg-white/20">
                 {/* Carousel for desktop and large size devices */}
                 <CarouselProvider className="lg:block hidden" 
+                
                     naturalSlideHeight={100}
-                    naturalSlideWidth={100} isIntrinsicHeight={true} totalSlides={slides ? slides.length : 7} visibleSlides={4} step={1} infinite={true}>
+                    naturalSlideWidth={100} isIntrinsicHeight={true} totalSlides={slides ? slides.length: 7} visibleSlides={4} step={1} infinite={true}>
                     <div className="w-full relative flex items-center justify-center">
-                        <ButtonBack role="button" aria-label="slide backward" className="absolute z-30 left-0 ml-8 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prev">
+                        <ButtonBack role="button" aria-label="slide backward" className="absolute z-30 left-[-7vh] focus:outline-none cursor-pointer" id="prev">
                             <svg width={8} height={14} viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M7 1L1 7L7 13" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -34,12 +35,17 @@ export default function Carousel({ setActive, slides, setIsLoaded }: any) {
                                                 key={slide.id} index={slide.id}
                                                 className="cursor-pointer rounded-xl"
                                             >
-                                                <div className="flex flex-shrink-0 relative w-full sm:w-auto hover:scale-[110%] rounded-xl transition-all duration-200">
+                                                <div className="flex flex-shrink-0 relative w-full sm:w-auto hover:scale-[110%] rounded-xl transition-all duration-200 group">
                                                     <img src={slide.url} alt="black chair and white table" className="object-cover 
                                                 rounded-xl shadow-2xl object-center w-full h-[30vh]" />
-                                                    <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-                                                        <div className="flex h-full items-end pb-6">
-                                                            <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white">Minimal Interior</h3>
+                                                    <div className="rounded-xl absolute w-full h-full p-6">
+                                                        <div className="flex items-end absolute bottom-[-100%] group-hover:bottom-0 transition-all ease-in-out duration-200 left-0 px-6 py-7 w-full"
+                                                        style={{
+                                                            background: 'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 69%, rgba(0,212,255,0) 100%)'
+                                                        }}
+                                                        >
+                                                            <h3 className="text-md lg:text-md font-semibold leading-5 lg:leading-6 text-white"
+                                                            >{slide.name}</h3>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -50,7 +56,7 @@ export default function Carousel({ setActive, slides, setIsLoaded }: any) {
                                 </div>
                             </Slider>
                         </div>
-                        <ButtonNext role="button" aria-label="slide forward" className="absolute z-30 right-0 mr-8 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="next">
+                        <ButtonNext role="button" aria-label="slide forward" className="absolute z-30 right-[-4vh]" id="next">
                             <svg width={8} height={14} viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 1L7 7L1 13" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
