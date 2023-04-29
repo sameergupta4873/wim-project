@@ -1,8 +1,8 @@
 import React from 'react'
 
-const PrimaryButton = ({text} : any) => {
+const PrimaryButton = ({text, setIsPlaying} : any) => {
   return (
-    <button className='p-3 max-xl:p-3 max-md:p-3 max-sm:p-3 text-xl rounded-full bg-white/20'>
+    <button onClick={()=> setIsPlaying(true)} className='p-3 max-xl:p-3 max-md:p-3 max-sm:p-3 text-xl rounded-full bg-white/20'>
         {/* {text} */}
         {text==='Play Now' && (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 max-sm:h-4 max-sm:w-4">
