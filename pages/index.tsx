@@ -12,6 +12,9 @@ export default function Home() {
   console.log(active);
   const [isLoaded, setIsLoaded] = React.useState(true);
   const [mute, setMute] = React.useState(0);
+  setTimeout(() => {
+    setIsLoaded(false)
+  }, 5000);
 
   const slides = [
     {
@@ -22,7 +25,7 @@ export default function Home() {
       dyration: "1h 52m",
       description: "A failed reporter is bonded to an alien entity, one of many symbiotes who have invaded Earth. But the being takes a liking to Earth and decides to protect it.",
       url: "https://images3.alphacoders.com/948/948864.jpg",
-      trailer:'u9Mv98Gr5pY'
+      trailer: 'u9Mv98Gr5pY'
     },
     {
       id: 1,
@@ -32,7 +35,7 @@ export default function Home() {
       dyration: "1h 52m",
       description: "A failed reporter is bonded to an alien entity, one of many symbiotes who have invaded Earth. But the being takes a liking to Earth and decides to protect it.",
       url: "https://assets1.ignimgs.com/2021/02/17/mortal-kombat-movie-poster-thumb-1613594784791_160w.jpg?width=1280",
-      trailer:'NYH2sLid0Zc'
+      trailer: 'NYH2sLid0Zc'
     },
     {
       id: 2,
@@ -42,7 +45,7 @@ export default function Home() {
       dyration: "1h 52m",
       description: "A failed reporter is bonded to an alien entity, one of many symbiotes who have invaded Earth. But the being takes a liking to Earth and decides to protect it.",
       url: "https://images.hdqwalls.com/wallpapers/infinite-sa.jpg",
-      trailer:'_WWEOCQGxSw'
+      trailer: '_WWEOCQGxSw'
     },
     {
       id: 3,
@@ -65,17 +68,17 @@ export default function Home() {
       </Head>
       <main
         className="h-[100vh] w-[100vw]">
-          {<iframe 
+        {<iframe
           className='absolute object-cover h-[100vh] w-[80vw] ml-[20vw] max-sm:ml-[0vw] max-sm:w-[100vw] max-sm:h-[30vh] max-sm:top-[7vh]'
           src={`https://www.youtube.com/embed/${slides.filter((slide) => slide.id === active).map((slide) => slide.trailer)}?&controls=0&mute=0&autoplay=1`}
-           frameBorder={0} 
-           allow='autoplay'
-           ></iframe>}
+          frameBorder={0}
+          allow='autoplay'
+        ></iframe>}
         {isLoaded && (
           <img
-          alt='hero-image'
-          className='absolute object-cover h-[100vh] w-[80vw] ml-[20vw] max-sm:ml-[0vw] max-sm:w-[100vw]'
-          src={`${slides.filter((slide) => slide.id === active).map((slide) => slide.url)}`}></img>
+            alt='hero-image'
+            className='absolute object-cover h-[100vh] w-[80vw] ml-[20vw] max-sm:ml-[0vw] max-sm:w-[100vw]'
+            src={`${slides.filter((slide) => slide.id === active).map((slide) => slide.url)}`}></img>
         )}
         <div
           style={{
