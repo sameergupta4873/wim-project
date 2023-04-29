@@ -15,6 +15,7 @@ export default function Home() {
   const [mute, setMute] = React.useState(0);
   const [tv, setTv] = React.useState(false);
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const [search, setSearch] = React.useState('');
   setTimeout(() => {
     setIsLoaded(false)
   }, 5000);
@@ -54,7 +55,7 @@ export default function Home() {
           }}
           className='absolute hidden max-sm:block h-[100vh] w-[100vw] max-sm:h-[107vh] max-sm:bg-gradient-to-t max-sm:from-[#00042d]'>
         </div>
-        <Navbar setTv={setTv} tv={tv} />
+        <Navbar setTv={setTv} tv={tv} search={search} setSearch={setSearch} />
         <div className='h-[53vh] relative max-md:h-[50vh] max-sm:mt-[15vh] max-sm:h-[58vh]'>
           <div className={`w-[45vw] h-[50vh] absolute bottom-0 px-16 py-5 text-white max-md:w-[50vw] max-sm:w-[100vw] max-sm:px-10 ${tv ? `right-[0vw] pr-5` : ""}`}>
             <h1 className='lg:text-5xl max-md:text-3xl max-sm:text-xl'>
@@ -108,7 +109,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </span>}
-            <iframe className='h-full w-full' src={ !tv ? `https://www.2embed.to/embed/imdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.imdbId)}` : `https://www.2embed.to/embed/imdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.imdbId)}&s=1&e=1`} />
+            <iframe allowFullScreen={true} className='h-full w-full' src={ !tv ? `https://www.2embed.to/embed/imdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.imdbId)}` : `https://www.2embed.to/embed/imdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.imdbId)}&s=1&e=1`} />
           </div>)}
       </main>
     </React.Fragment>
