@@ -117,7 +117,7 @@ export default function Home() {
             <p className='lg:text-xl max-md:text-lg sm:text-sm py-5 max-md:py-2 max-sm:py-3 max-sm:text-xs'>
               {slides.filter((slide) => slide.id === active).map((slide) => slide.description)}
             </p>
-            <div className='flex mt-10 max-md:mt-1 max-sm:mt-3 max-xl:mt-0'>
+            <div className='flex mt-2 max-md:mt-1 max-sm:mt-3 max-xl:mt-0'>
               <div className='mr-5'>
                 <PrimaryButton text={"Play Now"} />
               </div>
