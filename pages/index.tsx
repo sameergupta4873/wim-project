@@ -140,7 +140,7 @@ export default function Home() {
               {tv && details && (
                 <div className='flex'>
                   <div className='mt-1 mr-5'>
-                    <button onClick={() => setShowSeason(!showSeason)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">Season {season}<svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    <button onClick={() => setShowSeason(!showSeason)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center max-md:text-xs" type="button">Season {season}<svg className="w-4 h-4 ml-2 max-md:h-3 max-md:w-3 max-md:ml-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                     {showSeason && (<div id="dropdown" className="z-50 mt-2 absolute bg-gray-600 text-white divide-y divide-gray-100 rounded-lg shadow max-h-[40vh] overflow-y-scroll scrollbar-hide">
                       <ul className="py-2 text-sm" aria-labelledby="dropdownDefaultButton">
                         {details.seasons.map((season: any, id: any) => {
@@ -158,7 +158,8 @@ export default function Home() {
                     </div>)}
                   </div>
                   <div className='mt-1'>
-                    <button onClick={() => setShowEpisode(!showEpisode)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">Episode {episode}<svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    <button onClick={() => setShowEpisode(!showEpisode)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center max-md:text-xs" type="button">Episode {episode}
+                    <svg className="w-4 h-4 ml-2 max-md:h-3 max-md:w-3 max-md:ml-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                     {showEpisode && (<div id="dropdown" className="z-50 mt-2 absolute bg-gray-600 text-white divide-y divide-gray-100 rounded-lg shadow h-[40vh] overflow-y-scroll scrollbar-hide">
                       <ul className="py-2 text-sm" aria-labelledby="dropdownDefaultButton">
                         {Array(details.seasons[season - 1].episode_count).fill(0).map((_, id) => {
@@ -186,7 +187,7 @@ export default function Home() {
           }}
           className='w-full absolute h-[9vh] bottom-0'>
         </div>
-        <div className='w-[92vw] mx-auto max-md:w-[95vw] max-md:mt-5 max-sm:mt-0 border max-sm:h-[5vh]'>
+        <div className='w-[92vw] mx-auto max-md:w-[95vw] max-md:mt-20 max-sm:mt-0 border max-sm:h-[5vh]'>
           <Carousel setIsPlaying={setIsPlaying} setActive={setActive} slides={slides} active={active} tv={tv} setDetails={setDetails} fetchDetails={fetchDetails} setShowDetails={setShowDetails} setSeason={setSeason} setEpisode={setEpisode} />
         </div>
         {isPlaying && (
