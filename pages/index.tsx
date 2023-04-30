@@ -1,26 +1,86 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Carousel from '../components/Carousel'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import Navbar from '../components/Navbar'
 import movies from '../data/movie'
 import tvshows from '../data/tvshows'
+import fetchTopRatedMovies, { fetchTopRatedTv, fetchTopTvDetail } from './api/imdb'
+
+interface MovieDetails {
+  id: number;
+  imdbId: string;
+  title: string;
+  plot: string;
+  duration: string;
+  releaseDate: string;
+  posterUrl: string;
+  backDropUrl: string;
+  rating: number;
+  overview: string;
+}
+
+interface TvDetails {
+  id: number;
+  imdbId: string;
+  title: string;
+  plot: string;
+  duration: string;
+  releaseDate: string;
+  posterUrl: string;
+  backDropUrl: string;
+  rating: number;
+  overview: string;
+}
+
+
 
 export default function Home() {
-  const [active, setActive] = React.useState(0);
-  const [isLoaded, setIsLoaded] = React.useState(true);
-  const [mute, setMute] = React.useState(0);
+
   const [tv, setTv] = React.useState(false);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [search, setSearch] = React.useState('');
-  setTimeout(() => {
-    setIsLoaded(false)
-  }, 5000);
+  const [movies, setMovies] = useState<MovieDetails[]>([]);
+  const [tvShows, setTvShows] = useState<TvDetails[]>([]);
+  const [active, setActive] = React.useState(null);
+  const [details, setDetails]: any = React.useState(null);
+  const [showDeatils, setShowDetails] = React.useState(false);
+  const [season, setSeason] = React.useState(1);
+  const [showSeason, setShowSeason] = React.useState(false);
+  const [episode, setEpisode] = React.useState(1);
+  const [showEpisode, setShowEpisode] = React.useState(false);
 
-  const slides = !tv ? movies : tvshows;
+  useEffect(() => {
+    const loadMovies = async () => {
+      const topRatedMovies = await fetchTopRatedMovies();
+      setMovies(topRatedMovies);
+    };
+    loadMovies();
+    const loadTv = async () => {
+      const topRatedTv = await fetchTopRatedTv();
+      setTvShows(topRatedTv);
+    };
+    loadTv();
+  }, [active]);
+  
+
+  const fetchDetails = async (id: number) => {
+    const new_data: any = await fetchTopTvDetail(id);
+    setDetails(new_data);
+  };
+
+
+  const slides = !tv ? movies : tvShows;
+
+  if (slides[0] && !active) {
+    setActive(slides[0].id as any);
+    if(tv){
+      fetchDetails(slides[0].id);
+      setSeason(1);
+      setEpisode(1);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -31,17 +91,17 @@ export default function Home() {
       </Head>
       <main
         className="h-[100vh] w-[100vw]">
-        {!isPlaying && <iframe
+        {/* {!isPlaying && <iframe
           className={`absolute object-cover h-[100vh] w-[80vw] max-sm:ml-[0vw] max-sm:w-[100vw] max-sm:h-[30vh] max-sm:top-[7vh] ${tv ? 'ml-[0vw]' : 'ml-[20vw]'}`}
           src={`https://www.youtube.com/embed/${slides.filter((slide) => slide.id === active).map((slide) => slide.trailer)}?&controls=0&mute=0&rel=0&autoplay=1`}
           frameBorder={0}
           allow='autoplay'
-        ></iframe>}
-        {isLoaded && (
+        ></iframe>} */}
+        {(
           <img
             alt='hero-image'
             className={`absolute object-cover h-[100vh] w-[80vw] max-sm:ml-[0vw] max-sm:w-[100vw] ${tv ? 'ml-[0vw]' : 'ml-[20vw]'}`}
-            src={`${slides.filter((slide) => slide.id === active).map((slide) => slide.url)}`}></img>
+            src={`${slides.filter((slide) => slide.id === active).map((slide) => slide.backDropUrl)}`}></img>
         )}
         <div
           style={{
@@ -55,39 +115,67 @@ export default function Home() {
           }}
           className='absolute hidden max-sm:block h-[100vh] w-[100vw] max-sm:h-[107vh] max-sm:bg-gradient-to-t max-sm:from-[#00042d]'>
         </div>
-        <Navbar setTv={setTv} tv={tv} search={search} setSearch={setSearch} />
+        <Navbar setTv={setTv} tv={tv} search={search} setSearch={setSearch} slides={slides} active={active} setActive={setActive} />
         <div className='h-[53vh] relative max-md:h-[50vh] max-sm:mt-[15vh] max-sm:h-[58vh]'>
           <div className={`w-[45vw] h-[50vh] absolute bottom-0 px-16 py-5 text-white max-md:w-[50vw] max-sm:w-[100vw] max-sm:px-10 ${tv ? `right-[0vw] pr-5` : ""}`}>
-            <h1 className='lg:text-5xl max-md:text-3xl max-sm:text-xl'>
-              {slides.filter((slide) => slide.id === active).map((slide) => slide.name)}
+            <h1 className='lg:text-4xl max-md:text-2xl max-sm:text-lg'>
+              {slides.filter((slide) => slide.id === active).map((slide) => slide.title)}
             </h1>
             <div className='lg:py-3 max-md:py-1'>
-              <span className='lg:text-2xl max-md:text-lg sm:text-sm text-red-900 px-1 max-md:px-0.5'>{slides.filter((slide) => slide.id === active).map((slide) => slide.date)}
+              <span className='lg:text-xl max-md:text-lg sm:text-sm text-red-900 px-1 max-md:px-0.5'>{slides.filter((slide) => slide.id === active).map((slide) => slide.releaseDate)}
               </span>
-              <span className='lg:text-2xl max-md:text-lg sm:text-sm px-1 max-md:px-0.5'>|</span>
-              <span className='lg:text-2xl max-md:text-lg sm:text-sm px-1 max-md:px-0.5'>
-                {slides.filter((slide) => slide.id === active).map((slide) => slide.duration)}
+              <span className='lg:text-xl max-md:text-lg sm:text-sm px-1 max-md:px-0.5'>|</span>
+              <span className='lg:text-xl max-md:text-lg sm:text-sm px-1 max-md:px-0.5'>
+                Rating:
+                {slides.filter((slide) => slide.id === active).map((slide) => slide.rating ? ' '+slide.rating : ' N/A')}
               </span>
             </div>
-            <div className='pt-1 flex text-yellow-500'>
-              {Array(5).fill(0).map((_, i) => {
-                return (
-                  <span key={i}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="lg:w-6 lg:h-6 max-md:w-4 max-md:h-4 h-2 w-2">
-                      <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                )
-              })}
-            </div>
-            <p className='lg:text-xl max-md:text-lg sm:text-sm py-5 max-md:py-2 max-sm:py-3 max-sm:text-xs'>
-              {slides.filter((slide) => slide.id === active).map((slide) => slide.description)}
+            <p className='lg:text-lg max-md:text-lg sm:text-sm py-2 max-md:py-2 max-sm:py-3 max-sm:text-xs'>
+              {slides.filter((slide) => slide.id === active).map((slide) => slide.overview.slice(0, 170).trim() + '...')}
             </p>
             <div className='flex mt-2 max-md:mt-1 max-sm:mt-3 max-xl:mt-0'>
               <div className='mr-5'>
-                <PrimaryButton text={"Play Now"} setIsPlaying={setIsPlaying} />
+                <PrimaryButton text={"Play Now"} setIsPlaying={setIsPlaying} fetchDetails={fetchDetails} active={active} tv={tv} setShowDetails={setShowDetails} />
               </div>
-              <SecondaryButton text={"Trailer"} />
+              {tv && details && (
+                <div className='flex'>
+                  <div className='mt-1 mr-5'>
+                    <button onClick={() => setShowSeason(!showSeason)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">Season {season}<svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    {showSeason && (<div id="dropdown" className="z-50 mt-2 absolute bg-gray-600 text-white divide-y divide-gray-100 rounded-lg shadow max-h-[40vh] overflow-y-scroll scrollbar-hide">
+                      <ul className="py-2 text-sm" aria-labelledby="dropdownDefaultButton">
+                        {details.seasons.map((season: any, id: any) => {
+                          return (
+                            <li key={id}>
+                              <span onClick={() => {
+                                setSeason(id + 1);
+                                setEpisode(1);
+                                setShowSeason(!showSeason);
+                              }} className="block px-4 py-2 hover:bg-gray-700 cursor-pointer">Seasons {id + 1}</span>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>)}
+                  </div>
+                  <div className='mt-1'>
+                    <button onClick={() => setShowEpisode(!showEpisode)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center " type="button">Episode {episode}<svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    {showEpisode && (<div id="dropdown" className="z-50 mt-2 absolute bg-gray-600 text-white divide-y divide-gray-100 rounded-lg shadow h-[40vh] overflow-y-scroll scrollbar-hide">
+                      <ul className="py-2 text-sm" aria-labelledby="dropdownDefaultButton">
+                        {Array(details.seasons[season - 1].episode_count).fill(0).map((_, id) => {
+                          return (
+                            <li key={id}>
+                              <span onClick={() => {
+                                setShowEpisode(false)
+                                setEpisode(id + 1)
+                                }} className="block px-4 py-2 hover:bg-gray-700">Episode {id + 1}</span>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>)}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -99,17 +187,17 @@ export default function Home() {
           className='w-full absolute h-[9vh] bottom-0'>
         </div>
         <div className='w-[92vw] mx-auto max-md:w-[95vw] max-md:mt-5 max-sm:mt-0 border max-sm:h-[5vh]'>
-          <Carousel setIsPlaying={setIsPlaying} setActive={setActive} slides={slides} setIsLoaded={setIsLoaded} />
+          <Carousel setIsPlaying={setIsPlaying} setActive={setActive} slides={slides} active={active} tv={tv} setDetails={setDetails} fetchDetails={fetchDetails} setShowDetails={setShowDetails} setSeason={setSeason} setEpisode={setEpisode} />
         </div>
         {isPlaying && (
           <div className='top-0 absolute h-full w-full z-40'>
             {isPlaying &&
-              <span onClick={()=>setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
+              <span onClick={() => setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </span>}
-            <iframe allowFullScreen={true} className='h-full w-full' src={ !tv ? `https://www.2embed.to/embed/imdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.imdbId)}` : `https://www.2embed.to/embed/imdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.imdbId)}&s=1&e=1`} />
+            <iframe allowFullScreen={true} className='h-full w-full' src={!tv ? `https://www.2embed.to/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.to/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
           </div>)}
       </main>
     </React.Fragment>

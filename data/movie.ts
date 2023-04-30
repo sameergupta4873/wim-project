@@ -86,62 +86,7 @@ const movies  = [
         url: "https://w0.peakpx.com/wallpaper/288/777/HD-wallpaper-movie-parasite.jpg",
         trailer: "5xH0HfJHsaY",
         imdbId: 'tt6751668'
-      },
-      {
-        id: 8,
-        name: "Black Panther",
-        date: "2018",
-        rating: 5,
-        duration: "2h 15m",
-        description: "T'Challa, heir to the hidden but advanced kingdom of Wakanda, must step forward to lead his people into a new future and confront a challenger from his country's past.",
-        url: "https://images.hdqwalls.com/wallpapers/black-panther-movie-4k-artwork-m4.jpg",
-        trailer: "xjDjIWPwcPU",
-        imdbId: 'tt1825683'
-        },
-        {
-        id: 9,
-        name: "The Shape of Water",
-        date: "2017",
-        rating: 5,
-        duration: "2h 3m",
-        description: "At a top secret research facility in the 1960s, a lonely janitor forms a unique relationship with an amphibious creature that is being held in captivity.",
-        url: "https://images.hdqwalls.com/wallpapers/the-shape-of-water-movie-4k-o8.jpg",
-        trailer: "XFYWazblaUA",
-        imdbId: 'tt5580390'
-        },
-        {
-        id: 10,
-        name: "Once Upon a Time in Hollywood",
-        date: "2019",
-        rating: 5,
-        duration: "2h 41m",
-        description: "A faded television actor and his stunt double strive to achieve fame and success in the final years of Hollywood's Golden Age in 1969 Los Angeles.",
-        url: "https://images.hdqwalls.com/wallpapers/once-upon-a-time-in-hollywood-brad-pitt-leonardo-dicaprio-2019-movie-4k-6r.jpg",
-        trailer: "ELeMaP8EPAA",
-        imdbId: 'tt7131622'
-        },
-        {
-        id: 11,
-        name: "Ford v Ferrari",
-        date: "2019",
-        rating: 5,
-        duration: "2h 32m",
-        description: "American car designer Carroll Shelby and driver Ken Miles battle corporate interference and the laws of physics to build a revolutionary race car for Ford in order to defeat Ferrari at the 24 Hours of Le Mans in 1966.",
-        url: "https://images.hdqwalls.com/wallpapers/ford-v-ferrari-movie-poster-2019-07.jpg",
-        trailer: "I3h9Z89U9ZA",
-        imdbId: 'tt1950186'
-        },
-        {
-        id: 12,
-        name: "1917",
-        date: "2019",
-        rating: 5,
-        duration: "1h 59m",
-        description: "April 6th, 1917. As a regiment assembles to wage war deep in enemy territory, two soldiers are assigned to race against time and deliver a message that will stop 1,600 men from walking straight into a deadly trap.",
-        url: "https://images.hdqwalls.com/wallpapers/1917-movie-4k-j4.jpg",
-        trailer: "YqNYrYUiMfg",
-        imdbId: 'tt8579674'
-        }
+      }
 ]
 
 export default movies;
