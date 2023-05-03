@@ -208,16 +208,12 @@ export default function Home() {
         </div>
         {isPlaying && (
           <div className='top-0 absolute h-full w-full z-40'>
-            {isPlaying &&
-              (<div className='h-[100vh] w-[100vw] bg-black/75'>
-
                 <span onClick={() => setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </span>
-              </div>)}
-            <iframe allowFullScreen={true} className='h-full w-full' src={!tv ? `https://www.2embed.to/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.to/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
+              <iframe allowFullScreen={true} className='h-full w-full bg-black/75' src={!tv ? `https://www.2embed.to/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.to/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
           </div>)}
       </main>
     </React.Fragment>
