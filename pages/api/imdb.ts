@@ -50,10 +50,8 @@ if (!TMDB_API_KEY) {
 
 const TMDB_API_BASE_URL = 'https://api.themoviedb.org/3';
 
-const getImageUrl = (path: string | null, size: string): string | null => {
-    if (!path) {
-        return null;
-    }
+const getImageUrl =  (path: string | null, size: string): string | null => {
+    if(!path) return null;
     return `https://image.tmdb.org/t/p/${size}${path}`;
 };
 
@@ -106,7 +104,7 @@ export const fetchTopRatedTv = async (): Promise<TvDetails[]> => {
                 },
             });
             const data = response.data;
-            
+
 
             const MovieDetail = data.results.map((movie: any) => ({
                 id: movie.id,
@@ -128,20 +126,52 @@ export const fetchTopRatedTv = async (): Promise<TvDetails[]> => {
     }
 };
 
-export const fetchTopTvDetail = async (id : number)=> {
+export const fetchTopTvDetail = async (id: number) => {
     try {
         const response = await axios.get<TvShowDetails>(
             `${TMDB_API_BASE_URL}/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`
         );
-        
+
         const data = response.data;
-        
+
         return data;
     } catch (error) {
         console.error(error);
         return [];
     }
 };
+
+export const fetchSearchResults = async (search: string) => {
+    try {
+        const url = `${TMDB_API_BASE_URL}/search/movie`;
+        const response = await axios.get(url, {
+            params: {
+                api_key: TMDB_API_KEY,
+                language: 'en-US',
+                region: 'US',
+                query: search
+            },
+        });
+        const data = response.data;
+        const MovieDetail = data.results.map((movie: any) => ({
+            id: movie.id,
+            title: movie.title,
+            overview: movie.overview,
+            duration: `${movie.runtime} min`,
+            releaseDate: movie.release_date,
+            imdbId: movie.imdb_id,
+            posterUrl: getImageUrl(movie.poster_path, 'w500'),
+            backDropUrl: getImageUrl(movie.backdrop_path, 'original'),
+            rating: movie.vote_average
+        }));
+        
+        return MovieDetail;
+        
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 
 export default fetchTopRatedMovies;

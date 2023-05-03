@@ -9,7 +9,7 @@ export default function Carousel({ setActive, slides, setDetails, fetchDetails, 
 
     return (
         <div className="container mx-auto">
-            <div className="flex items-center justify-center w-full h-full py-24 sm:py-4 px-1 pl-5 bg-white/20">
+            <div className="flex items-center justify-center w-full h-full py-24 sm:py-4 px-1 pl-5">
                 {/* Carousel for desktop and large size devices */}
                 <CarouselProvider className="lg:block hidden"
 

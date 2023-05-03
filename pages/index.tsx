@@ -6,7 +6,7 @@ import SecondaryButton from '../components/SecondaryButton'
 import Navbar from '../components/Navbar'
 import movies from '../data/movie'
 import tvshows from '../data/tvshows'
-import fetchTopRatedMovies, { fetchTopRatedTv, fetchTopTvDetail } from './api/imdb'
+import fetchTopRatedMovies, { fetchSearchResults, fetchTopRatedTv, fetchTopTvDetail } from './api/imdb'
 
 interface MovieDetails {
   id: number;
@@ -51,18 +51,12 @@ export default function Home() {
   const [episode, setEpisode] = React.useState(1);
   const [showEpisode, setShowEpisode] = React.useState(false);
 
-  useEffect(() => {
-    const loadMovies = async () => {
-      const topRatedMovies = await fetchTopRatedMovies();
-      setMovies(topRatedMovies);
-    };
-    loadMovies();
-    const loadTv = async () => {
-      const topRatedTv = await fetchTopRatedTv();
-      setTvShows(topRatedTv);
-    };
-    loadTv();
-  }, [active]);
+  const searchMovies = async (query :string) => {
+    const searchQueryMovie = await fetchSearchResults(query);
+    setMovies(searchQueryMovie);
+  }
+
+ 
   
 
   const fetchDetails = async (id: number) => {
@@ -72,15 +66,37 @@ export default function Home() {
 
 
   const slides = !tv ? movies : tvShows;
+  const loadMovies = async () => {
+    const topRatedMovies = await fetchTopRatedMovies();
+    setMovies(topRatedMovies);
+  };
 
-  if (slides[0] && !active) {
-    setActive(slides[0].id as any);
-    if(tv){
-      fetchDetails(slides[0].id);
-      setSeason(1);
-      setEpisode(1);
+  useEffect(() => {
+    if(search === '' && movies.length === 0){
+      loadMovies();
     }
-  }
+
+    if(tv){
+      const loadTv = async () => {
+        const topRatedTv = await fetchTopRatedTv();
+        setTvShows(topRatedTv);
+      };
+      loadTv();
+    }
+    if(slides.filter((slide) => slide.id === active).length === 0 && slides[0]){
+      setActive(slides[0].id as any);
+    }
+    
+    if (slides[0] && !active && search === '') {
+      setActive(slides[0].id as any);
+      if(tv){
+        fetchDetails(slides[0].id);
+        setSeason(1);
+        setEpisode(1);
+      }
+    }
+  }, [active, search, slides, tv, movies]);
+
 
   return (
     <React.Fragment>
@@ -115,7 +131,7 @@ export default function Home() {
           }}
           className='absolute hidden max-sm:block h-[100vh] w-[100vw] max-sm:h-[107vh] max-sm:bg-gradient-to-t max-sm:from-[#00042d]'>
         </div>
-        <Navbar setTv={setTv} tv={tv} search={search} setSearch={setSearch} slides={slides} active={active} setActive={setActive} />
+        <Navbar loadMovies={loadMovies} searchMovies={searchMovies} setTv={setTv} tv={tv} search={search} setSearch={setSearch} slides={slides} active={active} setActive={setActive} />
         <div className='h-[53vh] relative max-md:h-[50vh] max-sm:mt-[15vh] max-sm:h-[58vh]'>
           <div className={`w-[45vw] h-[50vh] absolute bottom-0 px-16 py-5 text-white max-md:w-[50vw] max-sm:w-[100vw] max-sm:px-10 ${tv ? `right-[0vw] pr-5` : ""}`}>
             <h1 className='lg:text-4xl max-md:text-2xl max-sm:text-lg'>
@@ -187,17 +203,20 @@ export default function Home() {
           }}
           className='w-full absolute h-[9vh] bottom-0'>
         </div>
-        <div className='w-[92vw] mx-auto max-md:w-[95vw] max-md:mt-20 max-sm:mt-0 border max-sm:h-[5vh]'>
+        <div className='w-[92vw] mx-auto max-md:w-[95vw] max-md:mt-20 max-sm:mt-0 max-sm:h-[5vh]'>
           <Carousel setIsPlaying={setIsPlaying} setActive={setActive} slides={slides} active={active} tv={tv} setDetails={setDetails} fetchDetails={fetchDetails} setShowDetails={setShowDetails} setSeason={setSeason} setEpisode={setEpisode} />
         </div>
         {isPlaying && (
           <div className='top-0 absolute h-full w-full z-40'>
             {isPlaying &&
-              <span onClick={() => setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </span>}
+              (<div className='h-[100vh] w-[100vw] bg-black/75'>
+
+                <span onClick={() => setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </span>
+              </div>)}
             <iframe allowFullScreen={true} className='h-full w-full' src={!tv ? `https://www.2embed.to/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.to/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
           </div>)}
       </main>
