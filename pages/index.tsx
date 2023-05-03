@@ -51,13 +51,13 @@ export default function Home() {
   const [episode, setEpisode] = React.useState(1);
   const [showEpisode, setShowEpisode] = React.useState(false);
 
-  const searchMovies = async (query :string) => {
+  const searchMovies = async (query: string) => {
     const searchQueryMovie = await fetchSearchResults(query);
     setMovies(searchQueryMovie);
   }
 
- 
-  
+
+
 
   const fetchDetails = async (id: number) => {
     const new_data: any = await fetchTopTvDetail(id);
@@ -72,24 +72,24 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if(search === '' && movies.length === 0){
+    if (search === '' && movies.length === 0) {
       loadMovies();
     }
 
-    if(tv){
+    if (tv) {
       const loadTv = async () => {
         const topRatedTv = await fetchTopRatedTv();
         setTvShows(topRatedTv);
       };
       loadTv();
     }
-    if(slides.filter((slide) => slide.id === active).length === 0 && slides[0]){
+    if (slides.filter((slide) => slide.id === active).length === 0 && slides[0]) {
       setActive(slides[0].id as any);
     }
-    
+
     if (slides[0] && !active && search === '') {
       setActive(slides[0].id as any);
-      if(tv){
+      if (tv) {
         fetchDetails(slides[0].id);
         setSeason(1);
         setEpisode(1);
@@ -143,7 +143,7 @@ export default function Home() {
               <span className='lg:text-xl max-md:text-lg sm:text-sm px-1 max-md:px-0.5'>|</span>
               <span className='lg:text-xl max-md:text-lg sm:text-sm px-1 max-md:px-0.5'>
                 Rating:
-                {slides.filter((slide) => slide.id === active).map((slide) => slide.rating ? ' '+slide.rating : ' N/A')}
+                {slides.filter((slide) => slide.id === active).map((slide) => slide.rating ? ' ' + slide.rating : ' N/A')}
               </span>
             </div>
             <p className='lg:text-lg max-md:text-lg sm:text-sm py-2 max-md:py-2 max-sm:py-3 max-sm:text-xs'>
@@ -175,7 +175,7 @@ export default function Home() {
                   </div>
                   <div className='mt-1'>
                     <button onClick={() => setShowEpisode(!showEpisode)} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white bg-white/20 hover:bg-white/10 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center max-md:text-xs" type="button">Episode {episode}
-                    <svg className="w-4 h-4 ml-2 max-md:h-3 max-md:w-3 max-md:ml-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                      <svg className="w-4 h-4 ml-2 max-md:h-3 max-md:w-3 max-md:ml-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                     {showEpisode && (<div id="dropdown" className="z-50 mt-2 absolute bg-gray-600 text-white divide-y divide-gray-100 rounded-lg shadow h-[40vh] overflow-y-scroll scrollbar-hide">
                       <ul className="py-2 text-sm" aria-labelledby="dropdownDefaultButton">
                         {Array(details.seasons[season - 1].episode_count).fill(0).map((_, id) => {
@@ -184,7 +184,7 @@ export default function Home() {
                               <span onClick={() => {
                                 setShowEpisode(false)
                                 setEpisode(id + 1)
-                                }} className="block px-4 py-2 hover:bg-gray-700">Episode {id + 1}</span>
+                              }} className="block px-4 py-2 hover:bg-gray-700">Episode {id + 1}</span>
                             </li>
                           )
                         })}
@@ -208,12 +208,12 @@ export default function Home() {
         </div>
         {isPlaying && (
           <div className='top-0 absolute h-full w-full z-40'>
-                <span onClick={() => setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </span>
-              <iframe allowFullScreen={true} className='h-full w-full bg-black/75' src={!tv ? `https://www.2embed.to/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.to/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
+            <span onClick={() => setIsPlaying(false)} className='absolute top-5 right-5 text-white cursor-pointer'>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </span>
+            <iframe allowFullScreen={true} className='h-full w-full bg-black/75' src={!tv ? `https://www.2embed.to/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.to/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
           </div>)}
       </main>
     </React.Fragment>
