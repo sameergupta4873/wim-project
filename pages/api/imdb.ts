@@ -173,5 +173,36 @@ export const fetchSearchResults = async (search: string) => {
     }
 }
 
+export const fetchSearchTVResults = async (search: string) => {
+    try {
+        const url = `${TMDB_API_BASE_URL}/search/tv`;
+        const response = await axios.get(url, {
+            params: {
+                api_key: TMDB_API_KEY,
+                language: 'en-US',
+                region: 'US',
+                query: search
+            },
+        });
+        const data = response.data;
+        console.log(data);
+        
+        const MovieDetail = data.results.map((movie: any) => ({
+            id: movie.id,
+            title: movie.name,
+            overview: movie.overview,
+            duration: `${movie.runtime} min`,
+            releaseDate: movie.first_air_date,
+            imdbId: movie.imdb_id,
+            posterUrl: getImageUrl(movie.poster_path, 'w500'),
+            backDropUrl: getImageUrl(movie.backdrop_path, 'original'),
+            rating: movie.vote_average
+        }));
+        return MovieDetail;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 export default fetchTopRatedMovies;

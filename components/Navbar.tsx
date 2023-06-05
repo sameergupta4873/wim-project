@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-const Navbar = ({ setTv, tv, search, setSearch, slides, active, setActive, searchMovies, loadMovies }: any) => {
+const Navbar = ({ setTv, tv, search, setSearch, slides, active, setActive, searchMovies, loadMovies, loadTv, searchTv}: any) => {
 
 
     return (
@@ -33,9 +33,17 @@ const Navbar = ({ setTv, tv, search, setSearch, slides, active, setActive, searc
                         e.preventDefault;
                         setSearch(e.target.value);
                         if(search === ''){
-                            loadMovies();
+                            if(!tv){
+                                loadMovies();
+                            }else{
+                                loadTv();
+                            }
                         }else{
-                            searchMovies(search);
+                            if(!tv){
+                                searchMovies(search);
+                            }else{
+                                searchTv(search);
+                            }
                         }
                     }} className='bg-transparent max-sm:text-[10px] max-lg:text-sm max-sm:px-1 w-full h-full outline-none px-3 text-white' placeholder={ !tv ? `Search Movies` : `Search TV Shows` }/>
                 </div>

@@ -6,7 +6,7 @@ import SecondaryButton from '../components/SecondaryButton'
 import Navbar from '../components/Navbar'
 import movies from '../data/movie'
 import tvshows from '../data/tvshows'
-import fetchTopRatedMovies, { fetchSearchResults, fetchTopRatedTv, fetchTopTvDetail } from './api/imdb'
+import fetchTopRatedMovies, { fetchSearchResults, fetchSearchTVResults, fetchTopRatedTv, fetchTopTvDetail } from './api/imdb'
 
 interface MovieDetails {
   id: number;
@@ -56,6 +56,10 @@ export default function Home() {
     setMovies(searchQueryMovie);
   }
 
+  const searchTv = async (query: string) => {
+    const searchQueryTv = await fetchSearchTVResults(query);
+    setTvShows(searchQueryTv);
+  }
 
 
 
@@ -71,16 +75,17 @@ export default function Home() {
     setMovies(topRatedMovies);
   };
 
+  const loadTv = async () => {
+    const topRatedTv = await fetchTopRatedTv();
+    setTvShows(topRatedTv);
+  };
+
   useEffect(() => {
     if (search === '' && movies.length === 0) {
       loadMovies();
     }
 
-    if (tv) {
-      const loadTv = async () => {
-        const topRatedTv = await fetchTopRatedTv();
-        setTvShows(topRatedTv);
-      };
+    if (tv && search === '' && tvShows.length === 0) {
       loadTv();
     }
     if (slides.filter((slide) => slide.id === active).length === 0 && slides[0]) {
@@ -131,7 +136,7 @@ export default function Home() {
           }}
           className='absolute hidden max-sm:block h-[100vh] w-[100vw] max-sm:h-[107vh] max-sm:bg-gradient-to-t max-sm:from-[#00042d]'>
         </div>
-        <Navbar loadMovies={loadMovies} searchMovies={searchMovies} setTv={setTv} tv={tv} search={search} setSearch={setSearch} slides={slides} active={active} setActive={setActive} />
+        <Navbar loadMovies={loadMovies} searchMovies={searchMovies} loadTv={loadTv} searchTv={searchTv} setTv={setTv} tv={tv} search={search} setSearch={setSearch} slides={slides} active={active} setActive={setActive} />
         <div className='h-[53vh] relative max-md:h-[50vh] max-sm:mt-[15vh] max-sm:h-[58vh]'>
           <div className={`w-[45vw] h-[50vh] absolute bottom-0 px-16 py-5 text-white max-md:w-[50vw] max-sm:w-[100vw] max-sm:px-10 ${tv ? `right-[0vw] pr-5` : ""}`}>
             <h1 className='lg:text-4xl max-md:text-2xl max-sm:text-lg'>
