@@ -218,7 +218,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </span>
-            <iframe allowFullScreen={true} className='h-full w-full bg-black/75' src={!tv ? `https://www.2embed.cc/embed/tmdb/movie?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.cc/embed/tmdb/tv?id=${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
+            <iframe allowFullScreen={true} className='h-full w-full bg-black/75' src={!tv ? `https://www.2embed.cc/embed/${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}` : `https://www.2embed.cc/embed/${slides.filter((slide) => slide.id === active).map((slide) => slide.id)}&s=${season}&e=${episode}`} />
           </div>)}
       </main>
     </React.Fragment>
